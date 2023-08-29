@@ -21,18 +21,35 @@ function GetOffset(){
 
 const getData = api => {
   const currentOffset = GetOffset()
+  const newItem = document.createElement('section');
+  newItem.classList.add('Items');
 
   fetch(`${api}?offset=${currentOffset}&limit=10`)
     .then(response => response.json())
     .then(response => {
       let products = response;
         console.log('Hola:', products)
-      let output = products.map(product => {
+      products.forEach(product => {
         // template
+        const cardArticle = document.createElement('section')
+        cardArticle.classList.add('Card')
+
+        const cardImg = document.createElement('img')
+        cardImg.src = product.images[1]
+        cardImg.alt = product.title + ' image'
+
+        const cardTitle = document.createElement('h2')
+        cardTitle.innerText = product.title
+
+        const cardPrice = document.createElement('small')
+        cardPrice.innerText = '$' + product.price
+
+        cardTitle.innerHTML += cardPrice
+
+        cardArticle.append(cardImg, cardTitle)
+        newItem.appendChild(cardArticle)
       });
-      let newItem = document.createElement('section');
-      newItem.classList.add('Item');
-      newItem.innerHTML = output;
+
       $app.appendChild(newItem);
     })
     .catch(error => console.log(error));
