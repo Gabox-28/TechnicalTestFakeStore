@@ -46,27 +46,32 @@ const getData = api => {
     .then(response => response.json())
     .then(response => {
       let products = response;
-      products.forEach(product => {
-        // template
-        const cardArticle = document.createElement('section')
-        cardArticle.classList.add('Card')
+      if (products.length > 0){
+        products.forEach(product => {
+          // template
+          const cardArticle = document.createElement('section')
+          cardArticle.classList.add('Card')
 
-        const cardImg = document.createElement('img')
-        cardImg.setAttribute(lazyLoad ? 'data-src' : 'src', product.images[1])
-        cardImg.alt = product.title + ' image'
+          const cardImg = document.createElement('img')
+          cardImg.setAttribute(lazyLoad ? 'data-src' : 'src', product.images[1])
+          cardImg.alt = product.title + ' image'
 
-        const cardTitle = document.createElement('h2')
-        cardTitle.innerText = product.title
+          const cardTitle = document.createElement('h2')
+          cardTitle.innerText = product.title
 
-        const cardPrice = document.createElement('small')
-        cardPrice.innerText = '$' + product.price
+          const cardPrice = document.createElement('small')
+          cardPrice.innerText = '$' + product.price
 
-        cardTitle.innerHTML += cardPrice
+          cardTitle.innerHTML += cardPrice
 
-        cardArticle.append(cardImg, cardTitle)
-        newItem.appendChild(cardArticle)
-        lazyLoad.observe(cardImg)
-      });
+          cardArticle.append(cardImg, cardTitle)
+          newItem.appendChild(cardArticle)
+          lazyLoad.observe(cardImg)
+        });
+      }else{
+        $observe.innerText = "Todos los productos fueron obtenidos"
+        infinityLoad.unobserve($observe)
+      }
 
       $app.appendChild(newItem);
     })
