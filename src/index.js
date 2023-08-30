@@ -2,6 +2,10 @@ const $app = document.getElementById('app');
 const $observe = document.getElementById('observe');
 const API = 'https://api.escuelajs.co/api/v1/products';
 
+window.addEventListener('load', () => {
+  localStorage.removeItem('offset')
+})
+
 function SetNewOffset(newOffset){
   localStorage.setItem('offset', newOffset)
 }
@@ -25,9 +29,7 @@ const intersectionObserver = new IntersectionObserver(entries => {
       image.target.src = image.target.getAttribute('data-src')
     }
   })
-}, {
-
-});
+}, {});
 
 const getData = api => {
   const currentOffset = GetOffset()
@@ -38,7 +40,6 @@ const getData = api => {
     .then(response => response.json())
     .then(response => {
       let products = response;
-        console.log('Hola:', products)
       products.forEach(product => {
         // template
         const cardArticle = document.createElement('section')
@@ -66,8 +67,8 @@ const getData = api => {
     .catch(error => console.log(error));
 }
 
-const loadData = () => {
-  getData(API);
+const loadData = async () => {
+  await getData(API);
 }
 
 loadData()
