@@ -59,3 +59,7 @@ body {
 .hidden {
   display: none;
 }
+
+#app{
+  min-height: 110vh;
+}

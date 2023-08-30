@@ -23,13 +23,19 @@ function GetOffset(){
   return newOffset
 }
 
-const intersectionObserver = new IntersectionObserver(entries => {
+const lazyLoad = new IntersectionObserver(entries => {
   entries.forEach(image => {
     if (image.isIntersecting === true){
       image.target.src = image.target.getAttribute('data-src')
     }
   })
 }, {});
+
+const infinityLoad = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting === true){
+    loadData()
+  }
+}, {rootMargin: '0px 0px 100% 0px'})
 
 const getData = api => {
   const currentOffset = GetOffset()
@@ -46,7 +52,7 @@ const getData = api => {
         cardArticle.classList.add('Card')
 
         const cardImg = document.createElement('img')
-        cardImg.setAttribute(intersectionObserver ? 'data-src' : 'src', product.images[1])
+        cardImg.setAttribute(lazyLoad ? 'data-src' : 'src', product.images[1])
         cardImg.alt = product.title + ' image'
 
         const cardTitle = document.createElement('h2')
@@ -59,7 +65,7 @@ const getData = api => {
 
         cardArticle.append(cardImg, cardTitle)
         newItem.appendChild(cardArticle)
-        intersectionObserver.observe(cardImg)
+        lazyLoad.observe(cardImg)
       });
 
       $app.appendChild(newItem);
@@ -71,5 +77,4 @@ const loadData = async () => {
   await getData(API);
 }
 
-loadData()
-intersectionObserver.observe($observe);
+infinityLoad.observe($observe)
