@@ -62,7 +62,7 @@ const getData = api => {
           const cardPrice = document.createElement('small')
           cardPrice.innerText = '$' + product.price
 
-          cardTitle.innerHTML += cardPrice
+          cardTitle.append(cardPrice)
 
           cardArticle.append(cardImg, cardTitle)
           newItem.appendChild(cardArticle)
