@@ -19,6 +19,16 @@ function GetOffset(){
   return newOffset
 }
 
+const intersectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(image => {
+    if (image.isIntersecting === true){
+      image.target.src = image.target.getAttribute('data-src')
+    }
+  })
+}, {
+
+});
+
 const getData = api => {
   const currentOffset = GetOffset()
   const newItem = document.createElement('section');
@@ -35,7 +45,7 @@ const getData = api => {
         cardArticle.classList.add('Card')
 
         const cardImg = document.createElement('img')
-        cardImg.src = product.images[1]
+        cardImg.setAttribute(intersectionObserver ? 'data-src' : 'src', product.images[1])
         cardImg.alt = product.title + ' image'
 
         const cardTitle = document.createElement('h2')
@@ -48,6 +58,7 @@ const getData = api => {
 
         cardArticle.append(cardImg, cardTitle)
         newItem.appendChild(cardArticle)
+        intersectionObserver.observe(cardImg)
       });
 
       $app.appendChild(newItem);
@@ -58,12 +69,6 @@ const getData = api => {
 const loadData = () => {
   getData(API);
 }
-
-const intersectionObserver = new IntersectionObserver(entries => {
-  // logic...
-}, {
-  rootMargin: '0px 0px 100% 0px',
-});
 
 loadData()
 intersectionObserver.observe($observe);
